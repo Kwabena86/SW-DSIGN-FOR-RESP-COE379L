@@ -1,7 +1,8 @@
 import tensorflow as tf
-model = tf.keras.models.load_model('clothes.keras')
+model = tf.keras.models.load_model('models/hurricane_alt.keras')
 
-from flask import Flask
+from flask import Flask, request
+import numpy as np
 
 app = Flask(__name__)
 
@@ -11,7 +12,7 @@ def model_info():
       "version": "v1",
       "name": "hurricane_damage",
       "description": "Classify images containing buildings after a hurricane (damaged or not damaged)",
-      "number_of_parameters": 0
+      "number_of_parameters": 2601666
    }
 
 @app.route('/models/hurricane_damage/v1', methods=['POST'])
@@ -23,7 +24,7 @@ def classify_clothes_image():
       data = preprocess_input(im)
    except Exception as e:
       return {"error": f"Could not process the `image` field; details: {e}"}, 404
-   return { "result": model.predict(data).tolist()}
+   return { "result": model.predict([data]).tolist()}
 
 def preprocess_input(im):
    """
@@ -33,7 +34,7 @@ def preprocess_input(im):
    # convert to a numpy array
    d = np.array(im)
    # then add an extra dimension
-   return d.reshape(1, 28, 28)
+   return d.reshape(1, 128, 128, 3)
 
 # start the development server
 if __name__ == '__main__':
