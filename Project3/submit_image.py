@@ -17,8 +17,11 @@ def main(argv):
         rsp = requests.post("http://172.17.0.1:5000/models/hurricane_damage/v1", json={"image": img.tolist()})
 
         # print the json response
-        print(rsp.json())
-        # d = np.array(im)
+        result = rsp.json()['result'][0][0]
+        if result < 0.5:
+            print(f"{inputfile}\n contains damage")
+        else:
+            print(f"{inputfile}\n contains no damage")
 
 if __name__ == "__main__":
    main(sys.argv[1:])
