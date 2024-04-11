@@ -20,6 +20,8 @@ Then, you can submit images using the python script:
 ```bash
 ./submit_image.py <image_file>
 ```
+
+### Examples
 For example:
 ```bash
 ./submit_image.py test_image_damage.jpeg
@@ -34,7 +36,7 @@ For example:
 ```bash
 ./submit_image.py test_images/*
 ```
-The program will test each image one by one:
+The program will output each image one by one:
 ```bash
 test_images/-95.06356_29.831358.jpeg
  contains damage
@@ -42,4 +44,17 @@ test_images/-95.063575_30.036872.jpeg
  contains damage
 test_images/-95.06363_29.831315000000004.jpeg
  contains damage
+```
+To get model information, you can submit a request to the flask serve:
+```bash
+./submit_image.py info
+```
+The output should be:
+```bash
+{
+    'description': 'Classify images containing buildings after a hurricane (damaged or not damaged)', 
+    'name': 'hurricane_damage', 
+    'number_of_parameters': 2601153, 
+    'version': 'v1'
+}
 ```

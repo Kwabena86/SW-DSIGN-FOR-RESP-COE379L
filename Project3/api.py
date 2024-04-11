@@ -12,7 +12,7 @@ def model_info():
       "version": "v1",
       "name": "hurricane_damage",
       "description": "Classify images containing buildings after a hurricane (damaged or not damaged)",
-      "number_of_parameters": 2601666
+      "number_of_parameters": 2601153
    }
 
 @app.route('/models/hurricane_damage/v1', methods=['POST'])
@@ -24,15 +24,20 @@ def classify_clothes_image():
       data = preprocess_input(im)
    except Exception as e:
       return {"error": f"Could not process the `image` field; details: {e}"}, 404
-   return { "result": model.predict([data]).tolist()}
+   result = model.predict([data]).tolist()[0][0]
+   if result < 0.5:
+      return {"result": "contains damage"}
+   else:
+      return {"result": "contains no damage"}
 
 def preprocess_input(im):
    """
    Converts user-provided input into an array that can be used with the model.
    This function could raise an exception.
    """
-   # convert to a numpy array
-   d = np.array(im)
+   # convert to a numpy array and rescale
+   d = np.array(im) / 255.0
+
    # then add an extra dimension
    return d.reshape(1, 128, 128, 3)
 
