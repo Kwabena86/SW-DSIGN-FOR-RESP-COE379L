@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 import sys
 import requests
-from matplotlib import image
 
 def main(argv):
     if argv[0] == "info":

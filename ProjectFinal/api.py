@@ -10,6 +10,7 @@ model = transformers.TFAutoModelForSequenceClassification.from_pretrained("model
 checkpoint = "distilbert-base-uncased"
 tokenizer = AutoTokenizer.from_pretrained(checkpoint, use_fast=True)
 model_input = pipeline(task="text-classification", model= model, tokenizer=tokenizer)
+labels = ['allergy', 'arthritis', 'bronchial asthma', 'cervical spondylosis', 'chicken pox', 'common cold', 'dengue', 'diabetes', 'drug reaction', 'fungal infection', 'gastroesophageal reflux disease', 'hypertension', 'impetigo', 'jaundice', 'malaria', 'migraine', 'peptic ulcer disease', 'pneumonia', 'psoriasis', 'typhoid', 'urinary tract infection', 'varicose veins']
 
 app = Flask(__name__)
 
@@ -19,7 +20,8 @@ def model_info():
       "version": "v1",
       "name": "diagnosis_model",
       "description": "Classify text containing symptoms (one of 22 diagnoses)",
-      "pretrained_model": "distilbert-base-uncased"
+      "pretrained_model": "distilbert-base-uncased",
+      "diagnoses": labels
    }
 
 @app.route('/models/diagnosis_model/v1', methods=['POST'])
@@ -34,7 +36,6 @@ def postprocess(a):
    """
    Converts output into an readable output.
    """
-   labels = ['allergy', 'arthritis', 'bronchial asthma', 'cervical spondylosis', 'chicken pox', 'common cold', 'dengue', 'diabetes', 'drug reaction', 'fungal infection', 'gastroesophageal reflux disease', 'hypertension', 'impetigo', 'jaundice', 'malaria', 'migraine', 'peptic ulcer disease', 'pneumonia', 'psoriasis', 'typhoid', 'urinary tract infection', 'varicose veins']
    index = int(a["label"][6:])
    return {"diagnosis":labels[index], "score": a["score"]}
 
